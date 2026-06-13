@@ -99,7 +99,7 @@ resource "aws_lambda_function" "killswitch" {
 
   environment {
     variables = {
-      AGENT_ROLE_NAME = var.agent_role_name
+      AGENT_ROLE_NAME = local.agent_role_name
       DENY_POLICY_ARN = aws_iam_policy.bedrock_deny.arn
       ALERT_TOPIC_ARN = aws_sns_topic.ops_alert.arn
     }
@@ -131,7 +131,7 @@ resource "aws_iam_role_policy" "killswitch" {
       {
         Effect   = "Allow"
         Action   = "iam:AttachRolePolicy"
-        Resource = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.agent_role_name}"
+        Resource = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${local.agent_role_name}"
         # Least privilege: this Lambda can only attach THIS deny policy, nothing else.
         Condition = {
           ArnEquals = { "iam:PolicyARN" = aws_iam_policy.bedrock_deny.arn }

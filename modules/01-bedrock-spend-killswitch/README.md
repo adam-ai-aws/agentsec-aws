@@ -30,7 +30,21 @@ flowchart LR
 cd terraform
 terraform init
 terraform apply -var="agent_role_name=YOUR_AGENT_ROLE" -var="monthly_cap_usd=300"
+# No agent yet? Use the built-in demo role instead:
+terraform apply -var="create_demo_agent_role=true"
 ```
+
+## See it fire (without spending $300)
+
+```bash
+cd demo && ./run-demo.sh
+```
+
+The script (1) calls Bedrock as the agent role — succeeds; (2) invokes the
+kill-switch Lambda with a synthetic SNS budget event; (3) repeats the same
+Bedrock call — `AccessDeniedException`. Requires `jq`. Cost: < $0.01.
+In regions that require inference profiles, override the model, e.g.
+`MODEL_ID=eu.anthropic.claude-haiku-4-5-20251001-v1:0 ./run-demo.sh`.
 
 **Cost to run this demo:** ~$0. Budgets (first two free), SNS, and Lambda are all inside the free tier. The demo script that triggers a real Bedrock call costs < $0.01.
 
