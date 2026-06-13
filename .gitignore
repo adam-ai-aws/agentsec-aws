@@ -1,0 +1,5 @@
+.terraform/
+*.tfstate*
+*.zip
+.terraform.lock.hcl
+__pycache__/
